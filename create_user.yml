@@ -1,0 +1,13 @@
+---
+- name: Create a new Linux user
+  hosts: localhost
+  become: yes
+  vars:
+    password: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+  tasks:
+    - name: Add user
+      user:
+        name: "{{ username }}"
+        state: present
+        create_home: yes
+        password: "{{ password | password_hash('sha512') }}"
